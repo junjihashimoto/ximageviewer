@@ -195,8 +195,21 @@ main(){
 	break;
       case XK_x:
 	i+=1000;
+	break;
       case XK_z:
 	i-=1000;
+	break;
+      case XK_r:
+	i+=10000;
+	break;
+      case XK_e:
+	i-=10000;
+	break;
+      case XK_space:
+	if(i>=(int)flist.size())
+	  printf("Out of index:%d\n",i);
+	else
+	  printf("%s\n",flist[i].c_str());
 	break;
       default:
 	continue;
