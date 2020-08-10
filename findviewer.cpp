@@ -110,8 +110,19 @@ next_dir(const vector<string>& flist,unsigned int i){
   return i;
 }
 
+void
+run_cmd(vector<string>& flist,int i,const char* cmd,int x,int y,int w,int h){
+  char command[4096];
+  if(i>=(int)flist.size()) {
+    printf("Out of index:%d\n",i);
+  } else {
+    snprintf(command,sizeof(command),"%s %s %d %d %d %d",cmd,flist[i].c_str(),x,y,w,h);
+    system(command);
+  }
+}
+
 int
-main(){
+main(int argc, char** argv){
   string line;
   vector<string> flist;
   int i=0;
@@ -124,7 +135,15 @@ main(){
   Display * &d=xdisplay;
   XEvent &e=xevent;
   Window w;
+  int screen;
   XImage *img=NULL;
+  GC gc;
+
+  int start_button_x=0;
+  int start_button_y=0;
+  int rec_width=0;
+  int rec_height=0;
+  int jump_idx=0;
 
   xinit();
   xroot_height-=32;
@@ -132,11 +151,19 @@ main(){
 
   if(read_list(in,flist,im)<0)
     return -1;
-//   if(read_list(in,flist,1)<0)
+
+  if(argc>=2){
+    sscanf(argv[1],"%d",&i);
+    read_list(in,flist,i+1-flist.size(),mode);
+    i=next_dir(flist,0);
+  }
+  
+
+  //   if(read_list(in,flist,1)<0)
 //     return 1;
-//   if(read_image(flist[0],im)<0)
-//     return 1;
-  cout << flist[0] << endl;
+  if(read_image(flist[i],im)<0)
+    return 1;
+  cout << flist[i] << endl;
 
   
   rgb_trim(im,xroot_width,xroot_height);
@@ -145,9 +172,13 @@ main(){
   image_free(im);
 
   //  XMoveWindow(d,w,0,0);
-  XSelectInput(d,w,KeyPressMask|ExposureMask );
+  XSelectInput(d,w,KeyPressMask|ExposureMask|ButtonPressMask|ButtonReleaseMask|Button1MotionMask );
   Ximage_show(img, w);
   XMapWindow( d, w );
+
+  screen = DefaultScreen( d );
+  gc = DefaultGC( d, screen );
+  XSetForeground( d, gc, BlackPixel(d,screen) );
 
 //   return 0;
 
@@ -160,12 +191,44 @@ main(){
       Ximage_show(img, w);
       XFlush( d );
       break;
+    case ButtonPress:
+      Ximage_show(img, w);
+      start_button_x = e.xbutton.x;
+      start_button_y = e.xbutton.y;
+      printf("%d %d\n",start_button_x,start_button_y);
+      XDrawRectangle(d, w, gc, start_button_x, start_button_y, 3, 3);
+      break;
+    case MotionNotify:
+      Ximage_show(img, w);
+      rec_width = e.xbutton.x - start_button_x ;
+      rec_height = e.xbutton.y - start_button_y ;
+      if(rec_width < 0){
+	rec_width = 3;
+      }
+      if(rec_height < 0){
+	rec_height = 3;
+      }
+      printf("%d %d %d %d\n",start_button_x,start_button_y, rec_width, rec_height);
+      XDrawRectangle(d, w, gc, start_button_x, start_button_y, rec_width, rec_height);
+      break;
     case KeyPress:
       switch(XKeycodeToKeysym(d,e.xkey.keycode,0)){
+      case XK_1:
+	run_cmd(flist,i,"findview-cmd1",start_button_x,start_button_y, rec_width, rec_height);
+	break;
+      case XK_2:
+	run_cmd(flist,i,"findview-cmd2",start_button_x,start_button_y, rec_width, rec_height);
+	break;
+      case XK_3:
+	run_cmd(flist,i,"findview-cmd3",start_button_x,start_button_y, rec_width, rec_height);
+	break;
+      case XK_4:
+	run_cmd(flist,i,"findview-cmd4",start_button_x,start_button_y, rec_width, rec_height);
+	break;
       case XK_q:
 	return 0;
       case XK_n:
-	read_list(in,flist,i+1000+1-flist.size(),mode);
+	read_list(in,flist,i+100000+1-flist.size(),mode);
 	i=next_dir(flist,i);
 	break;
       case XK_p:
@@ -223,7 +286,7 @@ main(){
 	  i=flist.size()-1;
       }
       XStoreName(d,w,flist[i].c_str());
-      //      cout << i << " "<<flist[i] << endl;
+      cout << i << " "<<flist[i] << endl;
       if(read_image(flist[i],im)<0)
 	break;
       rgb_trim(im,xroot_width,xroot_height);
