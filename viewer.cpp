@@ -11,7 +11,7 @@ using namespace std;
 
 int
 main(){
-  data file;
+  ::data file;
   image im,im2;
 //   data_load(file,"sample.ppm");
   data_load(file,"/dev/stdin");

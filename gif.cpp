@@ -9,7 +9,7 @@ extern "C"{
 using namespace std;
 
 struct data_buf{
-  data* file;
+  ::data* file;
   int pos;
 };
 
@@ -42,7 +42,7 @@ ungif_input_func(GifFileType *GifFile, GifByteType *p, int s)
   return ret;
 }
 int
-gif2image(const data& file,image& im){
+gif2image(const ::data& file,image& im){
   int size, col, extcode;
   unsigned int row, sheight;
   int ioffset[] = { 0, 4, 2, 1 };
@@ -53,7 +53,7 @@ gif2image(const data& file,image& im){
   GifFileType *GifFile;
   ColorMapObject *ColorMap;
   int image_loaded = 0;
-  data_buf buf = {const_cast<data*>(&file),0};
+  data_buf buf = {const_cast<::data*>(&file),0};
   int err;
   if ((GifFile = DGifOpen((void*)&buf, ungif_input_func, &err)) == NULL) {
 #ifdef DEBUG

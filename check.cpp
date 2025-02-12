@@ -6,7 +6,7 @@
 using namespace std;
 int
 check_data(const char* file_name){
-  data file;
+  ::data file;
   if(data_load(file,file_name,24)<0)
     return -1;
   
@@ -52,7 +52,7 @@ check_data(const char* file_name){
   return -1;
 }
 int
-data2image(const data& file,image& i){
+data2image(const ::data& file,image& i){
   if(file.len>=2&&memcmp(file.head,"BM",2)==0)
     return bmp2image(file,i);
   if(file.len>=2&&memcmp(file.head,"P1",2)==0)

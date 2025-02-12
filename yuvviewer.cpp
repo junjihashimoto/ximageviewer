@@ -96,7 +96,7 @@ ShowImage(Display *d,Window w,image& im){
 static int root_height,root_width;
 static int
 ShowFile(Display *d,Window w,const string& f){
-  data file;
+  ::data file;
   image im,im2;
   int r;
   cerr << f << endl;

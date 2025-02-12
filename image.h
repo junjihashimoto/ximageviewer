@@ -82,34 +82,34 @@ extern int itu_yuv_image_free(itu_yuv_image& i);
 
 
 //bmp.cpp
-extern int bmp2image(const data& file,image& i);
-extern int image2bmp(const image& i,data& file,int bpp=24,char** bmp_into=NULL,char** pos_data=NULL);
-extern int rawbmp2image(const data& file,int height,int width,image& i);
+extern int bmp2image(const ::data& file,image& i);
+extern int image2bmp(const image& i,::data& file,int bpp=24,char** bmp_into=NULL,char** pos_data=NULL);
+extern int rawbmp2image(const ::data& file,int height,int width,image& i);
 
 //ppm.cpp
-extern int ppm2image(const data& file,image& i);
-extern int image2ppm(const image& i,data& file);
+extern int ppm2image(const ::data& file,image& i);
+extern int image2ppm(const image& i,::data& file);
 
 //jpeg.cpp
-extern int jpeg2image(const data& file,image& i);
-extern int image2jpeg(const image& i,data& file);
+extern int jpeg2image(const ::data& file,image& i);
+extern int image2jpeg(const image& i,::data& file);
 
 //gif.cpp
-extern int gif2image(const data& file,image& i);
+extern int gif2image(const ::data& file,image& i);
 
 //png.cpp
 #define LIBPNG
 #ifdef LIBPNG
-extern int png2image(const data& file,image& i);
+extern int png2image(const ::data& file,image& i);
 #endif
 
 //yuv.cpp
-extern int itu_yuv2image(const data& file,int height,int width,image& i);
-extern int image2itu_yuv(const image& i,data& file);
+extern int itu_yuv2image(const ::data& file,int height,int width,image& i);
+extern int image2itu_yuv(const image& i,::data& file);
 
 //check.cpp
 extern int check_data(const char* file_image);
-extern int data2image(const data& file,image& i);
+extern int data2image(const ::data& file,image& i);
 
 
 
@@ -156,5 +156,5 @@ extern int movie_free(movie& mo);
 extern int yuv2movie(char* file_name,int height,int width,float bit_rate,
 		     movie& mo);
 //uyvy2image.cpp
-extern int uyvy2image(const data& file,image& i);
+extern int uyvy2image(const ::data& file,image& i);
 #endif //IMAGECPP_H

@@ -14,7 +14,7 @@ using namespace std;
 int
 read_image(const string& fname,image& im){
   string line;
-  data file;
+  ::data file;
   if(data_load(file,fname.c_str())<0)
     return -1;
   if(data2image(file,im)<0){
@@ -28,7 +28,7 @@ read_image(const string& fname,image& im){
 int
 read_list(istream& in,vector<string>& flist,image& im){
   string line;
-  data file;
+  ::data file;
   while(getline(in,line)){
     if(data_load(file,line.c_str())<0)
       continue;

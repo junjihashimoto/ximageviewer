@@ -10,7 +10,7 @@ using namespace std;
 
 #define PNG_BYTES_TO_CHECK 4
 struct data_buf{
-  data* file;
+  ::data* file;
   int pos;
 };
 
@@ -48,7 +48,7 @@ warning_handler(png_structp png_ptr, png_const_charp warning_msg){
 }
 
 int
-png2image(const data& file,image& im){
+png2image(const ::data& file,image& im){
   png_structp png_ptr;
   png_infop info_ptr;
   png_uint_32 width, height;
@@ -56,7 +56,7 @@ png2image(const data& file,image& im){
   int bit_depth, color_type, interlace_type;
   int try_when_error;
   unsigned int i;
-  data_buf st = {const_cast<data*>(&file),0};
+  data_buf st = {const_cast<::data*>(&file),0};
 
   try_when_error = 0;
 
